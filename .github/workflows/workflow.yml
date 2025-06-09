@@ -1,0 +1,69 @@
+name: SMSML CI/CD Workflow
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  IMAGE_NAME: yourdockerhubusername/smsml-model:latest
+
+jobs:
+  lint-build-train-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.8'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r Membangun_model/requirements.txt
+
+    - name: Lint Python code
+      run: |
+        pip install flake8
+        flake8 Membangun_model/ --max-line-length=120 --ignore=E203,W503
+
+    - name: Run training script
+      run: |
+        python Membangun_model/modelling.py
+
+    - name: Run tuning script
+      run: |
+        python Membangun_model/modelling_tuning.py
+
+    - name: Upload model artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: model-artifacts
+        path: |
+          Membangun_model/model/
+          Membangun_model/eval_report.csv
+          Membangun_model/tuning_results.csv
+
+    - name: Build Docker image
+      run: |
+        docker build -t $IMAGE_NAME .
+
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Push Docker image
+      run: |
+        docker push $IMAGE_NAME
+
+    # (Opsional) Deploy ke server/container jika diperlukan
+    # - name: Deploy to server
+    #   run: |
+    #     ssh user@your-server 'docker pull $IMAGE_NAME && docker run -d -p 8000:8000 $IMAGE_NAME'
