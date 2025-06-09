@@ -1,0 +1,21 @@
+name: SMSML_Cecilia-Agnes-Vechrisda-Manalu
+
+conda_env: conda.yaml
+
+entry_points:
+  train:
+    parameters:
+      train_path: {type: str, default: "namadataset_preprocessing/train.csv"}
+      test_path: {type: str, default: "namadataset_preprocessing/test.csv"}
+      model_path: {type: str, default: "model/churn_rf.pkl"}
+      report_path: {type: str, default: "model/eval_report.csv"}
+    command: >
+      python modelling.py --train_path {train_path} --test_path {test_path} --model_path {model_path} --report_path {report_path}
+
+  tune:
+    parameters:
+      train_path: {type: str, default: "namadataset_preprocessing/train.csv"}
+      model_path: {type: str, default: "model/churn_rf_best.pkl"}
+      result_path: {type: str, default: "model/tuning_results.csv"}
+    command: >
+      python modelling_tuning.py --train_path {train_path} --model_path {model_path} --result_path {result_path}
