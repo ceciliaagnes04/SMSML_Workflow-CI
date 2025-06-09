@@ -30,20 +30,18 @@ jobs:
     - name: Lint Python code
       run: |
         pip install flake8
-        flake8 --max-line-length=120 --ignore=E203,W503 modelling.py
+        flake8 MLProject/ --max-line-length=120 --ignore=E203,W503
 
     - name: Run training script
       run: |
-        python modelling.py
+        python MLProject/modelling.py
 
     - name: Upload model artifacts
       uses: actions/upload-artifact@v4
       with:
         name: model-artifacts
         path: |
-          model/
-          eval_report.csv
-          tuning_results.csv
+          MLProject/model/
 
     - name: Build Docker image
       run: |
