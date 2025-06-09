@@ -25,29 +25,25 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install -r Membangun_model/requirements.txt
+        pip install -r requirements.txt
 
     - name: Lint Python code
       run: |
         pip install flake8
-        flake8 Membangun_model/ --max-line-length=120 --ignore=E203,W503
+        flake8 --max-line-length=120 --ignore=E203,W503 modelling.py
 
     - name: Run training script
       run: |
-        python Membangun_model/modelling.py
-
-    - name: Run tuning script
-      run: |
-        python Membangun_model/modelling_tuning.py
+        python modelling.py
 
     - name: Upload model artifacts
       uses: actions/upload-artifact@v4
       with:
         name: model-artifacts
         path: |
-          Membangun_model/model/
-          Membangun_model/eval_report.csv
-          Membangun_model/tuning_results.csv
+          model/
+          eval_report.csv
+          tuning_results.csv
 
     - name: Build Docker image
       run: |
