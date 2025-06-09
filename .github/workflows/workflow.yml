@@ -34,7 +34,7 @@ jobs:
 
     - name: Run training script
       run: |
-        python MLProject/modelling.py
+        python MLProject/modelling.py --train_path namadataset_preprocessing/train.csv --test_path namadataset_preprocessing/test.csv
 
     - name: Upload model artifacts
       uses: actions/upload-artifact@v4
