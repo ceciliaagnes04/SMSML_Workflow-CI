@@ -7,7 +7,6 @@ from sklearn.metrics import classification_report, accuracy_score, precision_sco
 import mlflow
 import mlflow.sklearn
 from mlflow.models.signature import infer_signature
-from mlflow.tracking import MlflowClient
 import datetime
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -52,17 +51,9 @@ def train_and_log(train_path, test_path, model_path, report_path):
     logging.info(f"Model saved to {model_path}")
     logging.info(f"Evaluation report saved to {report_path}")
 
-    # Gunakan localhost untuk MLflow tracking
-    mlflow.set_tracking_uri('http://127.0.0.1:5000')
-
-    experiment_name = "Modelling_Cecilia-Agnes-Vechrisda-Manalu"
-    client = MlflowClient()
-    experiment = client.get_experiment_by_name(experiment_name)
-    if experiment is None or experiment.lifecycle_stage == "deleted":
-        experiment_name = f"{experiment_name}_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
-        client.create_experiment(experiment_name)
-
-    mlflow.set_experiment(experiment_name)
+    # Hapus pengaturan tracking URI dan client MLflow yang membutuhkan server
+    # Gunakan MLflow local tracking (default mlruns folder)
+    mlflow.set_experiment("Modelling_Cecilia-Agnes-Vechrisda-Manalu")
 
     input_example = X_test.iloc[[0]]
     signature = infer_signature(input_example, model.predict(input_example))
