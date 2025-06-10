@@ -1,5 +1,4 @@
 import os
-import shutil
 import pandas as pd
 import joblib
 import logging
@@ -86,18 +85,10 @@ def train_and_log(train_path, test_path, model_path, report_path):
         logging.info("Model & report logged to MLflow.")
 
 if __name__ == "__main__":
+    BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     train_and_log(
-        train_path="C:/Users/Lenovo/Downloads/SMSML_Cecilia-Agnes-Vechrisda-Manalu/Membangun_model/namadataset_preprocessing/train.csv",
-        test_path="C:/Users/Lenovo/Downloads/SMSML_Cecilia-Agnes-Vechrisda-Manalu/Membangun_model/namadataset_preprocessing/test.csv",
-        model_path="C:/Users/Lenovo/Downloads/SMSML_Cecilia-Agnes-Vechrisda-Manalu/Membangun_model/model/churn_rf.pkl",
-        report_path="C:/Users/Lenovo/Downloads/SMSML_Cecilia-Agnes-Vechrisda-Manalu/Membangun_model/model/eval_report.csv"
+        train_path = os.path.join(BASE_DIR, "namadataset_preprocessing", "train.csv"),
+        test_path = os.path.join(BASE_DIR, "namadataset_preprocessing", "test.csv"),
+        model_path = os.path.join(BASE_DIR, "model", "churn_rf.pkl"),
+        report_path = os.path.join(BASE_DIR, "model", "eval_report.csv")
     )
-
-    # Kompres folder model setelah training
-    folder_name = 'model'
-    zip_name = f'{folder_name}.zip'
-
-    if os.path.exists(zip_name):
-        os.remove(zip_name)
-
-    shutil.make_archive(folder_name, 'zip', folder_name)
