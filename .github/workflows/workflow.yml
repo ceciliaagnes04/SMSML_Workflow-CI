@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  IMAGE_NAME: yourdockerhubusername/smsml-model:latest
+  IMAGE_NAME: ceciliaagnes04/smsml-model:latest
 
 jobs:
   lint-build-train-deploy:
