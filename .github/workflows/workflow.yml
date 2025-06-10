@@ -33,8 +33,8 @@ jobs:
         flake8 MLProject/ --max-line-length=120 --ignore=E203,W503 --exit-zero
 
     - name: Run training script
-      run: |
-        python MLProject/modelling.py --train_path namadataset_preprocessing/train.csv --test_path namadataset_preprocessing/test.csv
+      working-directory: MLProject
+      run: python modelling.py
 
     - name: Upload model artifacts
       uses: actions/upload-artifact@v4
